@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import {
     Card, CardImg, CardText, CardBody,
     Container, Row, Col
-} from 'reactstrap';
+} from 'reactstrap'
 
-export default class ListOfTasks extends Component {
+import { loadTasks } from '../actions/tasksAction'
+import { connect } from 'react-redux'
+
+class ListOfTasks extends Component {
     render() {
         return (
             <div>
@@ -25,4 +28,16 @@ export default class ListOfTasks extends Component {
             </div>
         )
     }
+    componentWillMount() {
+        this.props.loadTasks();
+    }
 }
+
+
+const mapStateToProps = state => {
+    return {
+        tasks: { ...state.tasks }
+    }
+}
+
+export default connect(mapStateToProps, { loadTasks })(ListOfTasks);
