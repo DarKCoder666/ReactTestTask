@@ -16,16 +16,16 @@ import ListOfTasks from './components/ListOfTasks'
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Provider store={store}>
+      <Provider store={store}>
+        <div className="App">
           <Header />
 
           <Router history={history}>
             <Route path="/" exact component={ListOfTasks} />
           </Router>
 
-        </Provider>
-      </div>
+        </div>
+      </Provider>
     );
   }
 }
