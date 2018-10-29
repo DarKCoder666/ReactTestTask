@@ -3,10 +3,8 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
     Container
 } from 'reactstrap'
 import { Router, Link } from 'react-router-dom'
@@ -24,6 +22,11 @@ class Header extends Component {
         };
         this.toggle = this.toggle.bind(this);
     }
+
+    /**
+     * This function came from reactstrap documentation
+     * Workd in mobile scrins, to hide the menu
+     */
     toggle() {
         this.setState({
             isOpen: !this.state.isOpen
@@ -49,7 +52,8 @@ class Header extends Component {
                                     }}>
                                         <Link to="/addTask/">Add Task</Link>
                                     </NavItem>
-
+                                    
+                                    {/* Templates for authinticated users and not */}
                                     {(!this.props.auth.loggedIn) ? (
                                         <NavItem style={{
                                             fontSize: '18px',

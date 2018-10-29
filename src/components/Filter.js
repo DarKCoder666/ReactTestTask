@@ -47,6 +47,10 @@ export default class Filter extends Component {
         e.preventDefault();
     }
 
+    /**
+     * Loads tasks on component mount by params in url if they exists
+     * othervise default params will be used
+     */
     componentWillMount() {
         const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
         let newParams = {...params};

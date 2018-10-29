@@ -1,4 +1,4 @@
-import { LOAD_LIST } from '../actions/types';
+import { LOAD_LIST, UPDATE_TASK } from '../actions/types';
 
 const initialState = {
     currentTasks: [],
@@ -18,6 +18,17 @@ export default function (state = initialState, action) {
                 currentPage: action.payload.page,
                 amountOfTasks: action.payload.data.total_task_count
             }
+        case UPDATE_TASK:
+            let tempState = Object.assign({}, state);
+            tempState.currentTasks = tempState.currentTasks.map((el) => {
+                if(el.id === action.payload.id) {
+                    console.log(el, action.payload.data, Object.assign({}, el, action.payload.data));
+                    return Object.assign({}, el, action.payload.data);
+                }
+                return el;
+            });
+            console.log(tempState);
+            return tempState
         default:
             return state;
     }

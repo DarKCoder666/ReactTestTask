@@ -12,6 +12,11 @@ export default class Pagination extends Component {
         this.pageChange = this.pageChange.bind(this);
     }
 
+    /**
+     * Triggers when any button on pagination line pressed
+     * Changes current page, and trigger load tasks action
+     * @param {Object} e 
+     */
     pageChange(e) {
         const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
 
@@ -39,7 +44,6 @@ export default class Pagination extends Component {
                     pageCount={Math.ceil(this.props.tasks.amountOfTasks / 3)}
                     marginPagesDisplayed={3}
                     pageRangeDisplayed={this.props.tasks.tasksPerPage}
-                    breakLabel={<a href="">...</a>}
                     breakClassName={"break-me"}
                     onPageChange={this.pageChange}
                     containerClassName={"pagination"}

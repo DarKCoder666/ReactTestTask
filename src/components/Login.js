@@ -17,6 +17,11 @@ class Login extends Component {
         this.onInputChange = this.onInputChange.bind(this);
     }
 
+    /**
+     * Login form submit handler
+     * Calls auth action, particularly 'login' 
+     * @param {Object} e 
+     */
     loginSubmit(e) {
         e.preventDefault();
 
@@ -28,6 +33,10 @@ class Login extends Component {
         });
     }
 
+    /**
+     * Changes the values in state when input changes
+     * @param {Object} e 
+     */
     onInputChange(e) {
         const name = e.target.name;
 

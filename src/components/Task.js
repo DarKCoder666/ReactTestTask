@@ -17,6 +17,10 @@ export default class Task extends Component {
         this.editHandler = this.editHandler.bind(this);
     }
 
+    /**
+     * Handles the task edit form submit
+     * @param {Object} e 
+     */
     editHandler(e) {
         e.preventDefault();
 
@@ -24,13 +28,18 @@ export default class Task extends Component {
 
         this.props.editTask({
             text: formData.get('text'),
-            id: this.props.el.id,
-            status: formData.get('status')
-        });
+            status: parseInt(formData.get('status'))
+        }, this.props.el.id);
+
+        this.setState({
+            godMod: false
+        })
     }
 
     render() {
         const el = this.props.el;
+
+        // If the task not in edit state, he will see this template
         const viewMod = (
             <CardBody>
                 <CardSubtitle>User Name: {el.username}</CardSubtitle>
@@ -46,7 +55,8 @@ export default class Task extends Component {
                 )}
             </CardBody>
         );
-
+        
+        // If user clicked at edit button, he will see this from
         const godModForm = (
             <Form onSubmit={this.editHandler}>
                 <FormGroup>
@@ -59,7 +69,7 @@ export default class Task extends Component {
 
                 <Input type="textarea" name="text" defaultValue={el.text} />
 
-                <Button style={{margin: '15px 0'}}>Save</Button>
+                <Button style={{ margin: '15px 0' }}>Save</Button>
             </Form>
         );
 
@@ -70,11 +80,8 @@ export default class Task extends Component {
                         <CardImg top width="100%" src={el.image_path} alt="Card image cap" />
                     </Col>
                     <Col xs="12" sm="8">
-                        {!this.state.godMod ? (
-                            viewMod
-                        ) : (
-                                godModForm
-                            )}
+                        {/* Decides whether it which template to show */}
+                        {!this.state.godMod ? (viewMod) : (godModForm)}
 
                     </Col>
                 </Row>

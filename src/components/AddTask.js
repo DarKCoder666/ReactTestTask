@@ -3,6 +3,8 @@ import { Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
 import { addTask } from '../actions/tasksAction'
 import { connect } from 'react-redux'
 
+import { dataURItoBlob, resizeImage } from '../scripts/imageManipulations'
+
 import Task from './Task'
 
 class AddTask extends Component {
@@ -21,6 +23,9 @@ class AddTask extends Component {
         this.onInputChange = this.onInputChange.bind(this);
     }
 
+    /**
+     * Activated preview window
+     */
     onPreviewClick() {
         this.setState({
             preview: {
@@ -30,6 +35,10 @@ class AddTask extends Component {
         })
     }
 
+    /**
+     * Changes input values in state when input changes
+     * @param {Object} e 
+     */
     async onInputChange(e) {
         let name = e.target.name;
         let value = e.target.value;
@@ -47,7 +56,12 @@ class AddTask extends Component {
             }
         })
     }
-
+    
+    /** 
+     * Async function
+     * Resizes image usgin config params
+     * And then calls action 'addTask'
+     */
     async submitForm(e) {
         e.preventDefault();
 
@@ -105,62 +119,3 @@ class AddTask extends Component {
 
 
 export default connect(null, { addTask })(AddTask);
-
-function resizeImage(file, MAX_WIDTH, MAX_HEIGHT) {
-    return new Promise(resolve => {
-        let img = document.createElement('img');
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            img.onload = () => {
-                let canvas = document.createElement('canvas');
-                let ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0);
-
-                let width = img.width;
-                let height = img.height;
-
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                } else {
-                    if (height > MAX_HEIGHT) {
-                        width *= MAX_HEIGHT / height;
-                        height = MAX_HEIGHT;
-                    }
-                }
-                canvas.width = width;
-                canvas.height = height;
-                ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-
-                var dataurl = canvas.toDataURL("image/png");
-                resolve(dataurl)
-            }
-            img.src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-
-    })
-}
-
-function dataURItoBlob(dataURI) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-    else
-        byteString = unescape(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], { type: mimeString });
-}
