@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 
 // History for router
 import history from './history';
@@ -12,6 +12,8 @@ import { Provider } from 'react-redux';
 
 import Header from './components/Header'
 import ListOfTasks from './components/ListOfTasks'
+import AddTask from './components/AddTask'
+import Login from './components/Login'
 
 class App extends Component {
   render() {
@@ -21,7 +23,11 @@ class App extends Component {
           <Header />
 
           <Router history={history}>
-            <Route path="/" exact component={ListOfTasks} />
+            <Switch>
+              <Route path="/" exact component={ListOfTasks} />
+              <Route path="/addTask" exact component={AddTask} />
+              <Route path="/login" exact component={Login} />
+            </Switch>
           </Router>
 
         </div>

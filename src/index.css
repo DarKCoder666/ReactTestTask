@@ -12,3 +12,48 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+
+#react-paginate ul {
+    display: inline-block;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#react-paginate li {
+    display: inline-block;
+}
+
+#react-paginate .break a {
+    cursor: default;
+}
+
+.pagination {
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.pagination li {
+  background-color: #fff;
+  color: #333;
+  font-size: 20px;
+  font-size: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 0 10px;
+  
+  transition: .3s ease-in-out;
+}
+
+.pagination a {
+  padding: 5px 10px;
+}
+
+.pagination li.active {
+  border-radius: 5px;
+  background-color: #1b1bc0;
+}
+
+.pagination li.active a {
+  color: #fff!important;
+}

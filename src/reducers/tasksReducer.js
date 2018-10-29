@@ -1,7 +1,7 @@
 import { LOAD_LIST } from '../actions/types';
 
 const initialState = {
-    tasks: {},
+    currentTasks: [],
     currentPage: 0,
     amountOfTasks: 0,
     tasksPerPage: 3
@@ -12,10 +12,9 @@ export default function (state = initialState, action) {
         case LOAD_LIST:
             return {
                 ...state,
-                tasks: {
-                    ...state.tasks,
-                    [action.payload.page]: action.payload.data.tasks
-                },
+                currentTasks: [
+                    ...action.payload.data.tasks
+                ],
                 currentPage: action.payload.page,
                 amountOfTasks: action.payload.data.total_task_count
             }

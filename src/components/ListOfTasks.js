@@ -1,43 +1,36 @@
 import React, { Component } from 'react'
-import {
-    Card, CardImg, CardText, CardBody,
-    Container, Row, Col
-} from 'reactstrap'
+import { Container } from 'reactstrap'
 
-import { loadTasks } from '../actions/tasksAction'
 import { connect } from 'react-redux'
+import { loadTasks, editTask } from '../actions/tasksAction' 
+
+import Task from './Task'
+import Filter from './Filter'
+import Pagination from './Pagination'
 
 class ListOfTasks extends Component {
     render() {
+        let tasks = this.props.tasks.currentTasks.map((el, i) => (
+            <Task editTask={this.props.editTask} auth={this.props.auth} key={i} el={el} />
+        ));
+
         return (
             <div>
-                <Container style={{margin: "40px auto"}}>
-                    <Card>
-                        <Row>
-                            <Col xs="12" sm="4">
-                                <CardImg top width="100%" src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180" alt="Card image cap" />
-                            </Col>
-                            <Col xs="12" sm="8">
-                                <CardBody>
-                                    <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-                                </CardBody>
-                            </Col>
-                        </Row>
-                    </Card>
+                <Container>
+                    <Filter loadTasks={this.props.loadTasks}  location={this.props.location} />
+                    {tasks}
+                    <Pagination loadTasks={this.props.loadTasks}  location={this.props.location} tasks={this.props.tasks} />
                 </Container>
             </div>
         )
     }
-    componentWillMount() {
-        this.props.loadTasks();
-    }
 }
-
 
 const mapStateToProps = state => {
     return {
-        tasks: { ...state.tasks }
+        tasks: { ...state.tasks },
+        auth: { ...state.auth }
     }
 }
 
-export default connect(mapStateToProps, { loadTasks })(ListOfTasks);
+export default connect(mapStateToProps, { loadTasks, editTask })(ListOfTasks);
