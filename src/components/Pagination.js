@@ -29,7 +29,7 @@ export default class Pagination extends Component {
         history.push({
             pathname: '/',
             search: "?" + new URLSearchParams({
-                sort: params.filter,
+                filter: params.filter,
                 direction: params.direction,
                 page: e.selected + 1
             }).toString()

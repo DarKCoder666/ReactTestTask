@@ -38,7 +38,7 @@ export default class Filter extends Component {
         history.push({
             pathname: '/',
             search: "?" + new URLSearchParams({
-                sort: filter,
+                filter: filter,
                 direction: direction,
                 page: params.page
             }).toString()
