@@ -46,8 +46,8 @@ export default class Task extends Component {
                 <br />
                 <CardSubtitle>Email: {el.email}</CardSubtitle>
                 <br />
-                {(el.status === 0) ? (<Badge color="danger">Not Done Yet</Badge>)
-                    : (<Badge color="success">Done</Badge>)}
+                {(el.status === 10) ? ( <Badge color="success">Done</Badge>)
+                    : (<Badge color="danger">Not Done Yet</Badge>)}
                 <CardText>Task: {el.text}</CardText>
 
                 {(this.props.auth && this.props.auth.loggedIn) && (

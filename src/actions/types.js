@@ -1,5 +1,9 @@
 export const LOAD_LIST = 'LOAD_LIST';
 export const UPDATE_TASK = 'UPDATE_TASK';
+export const TOGGLE_PREVIEW_VISIBILITY = 'TOGGLE_PREVIEW_VISIBILITY';
+export const PREVIEW_INPUT_CHANGE = 'PREVIEW_INPUT_CHANGE';
+export const UPDATE_FILTER = 'UPDATE_FILTER';
+
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';

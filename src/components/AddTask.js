@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
-import { addTask } from '../actions/tasksAction'
+import { addTask, togglePreviewVisibility, onPreviewInputChange } from '../actions/tasksAction'
 import { connect } from 'react-redux'
 
 import { dataURItoBlob, resizeImage } from '../scripts/imageManipulations'
@@ -14,25 +14,11 @@ class AddTask extends Component {
         this.state = {
             preview: {
                 canShow: false,
-                status: 0
             }
         }
 
         this.submitForm = this.submitForm.bind(this);
-        this.onPreviewClick = this.onPreviewClick.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
-    }
-
-    /**
-     * Activated preview window
-     */
-    onPreviewClick() {
-        this.setState({
-            preview: {
-                ...this.state.preview,
-                canShow: !this.state.preview.canShow
-            }
-        })
     }
 
     /**
@@ -40,21 +26,7 @@ class AddTask extends Component {
      * @param {Object} e 
      */
     async onInputChange(e) {
-        let name = e.target.name;
-        let value = e.target.value;
 
-        if (name === 'file') {
-            const file = e.target.files[0];
-            name = "image_path"
-            value = file ? await resizeImage(e.target.files[0]) : "";
-        }
-
-        this.setState({
-            preview: {
-                ...this.state.preview,
-                [name]: value
-            }
-        })
     }
     
     /** 
@@ -68,6 +40,7 @@ class AddTask extends Component {
         let formData = new FormData(e.target);
         const resizedImage = await resizeImage(formData.get('file'), 320, 240);
         formData.append("image", dataURItoBlob(resizedImage));
+
         this.props.addTask(formData);
     }
 
@@ -78,22 +51,29 @@ class AddTask extends Component {
                     <Form onSubmit={this.submitForm}>
                         <FormGroup>
                             <Label for="username">Name</Label>
-                            <Input type="text" name="username" id="username" placeholder="Your name" required onChange={this.onInputChange} />
+                            <Input type="text" name="username" id="username" 
+                                   value={this.props.tasks.preview.inputs.username} 
+                                   placeholder="Your name" required onChange={this.props.onPreviewInputChange} />
                         </FormGroup>
 
                         <FormGroup>
                             <Label for="email">Email</Label>
-                            <Input type="email" name="email" id="email" placeholder="Your Email" required onChange={this.onInputChange} />
+                            <Input type="email" name="email" id="email"
+                                   value={this.props.tasks.preview.inputs.email} 
+                                   placeholder="Your Email" required onChange={this.props.onPreviewInputChange} />
                         </FormGroup>
 
                         <FormGroup>
                             <Label for="image">File</Label>
-                            <Input type="file" name="file" id="image" accept=".png, .jpg, .jpeg .gif" required onChange={this.onInputChange} />
+                            <Input type="file" name="file" id="image" accept=".png, .jpg, .jpeg .gif" 
+                                onChange={this.props.onPreviewInputChange} required />
                         </FormGroup>
 
                         <FormGroup>
                             <Label for="text">Text</Label>
-                            <Input type="textarea" name="text" id="text" required onChange={this.onInputChange} />
+                            <Input type="textarea" name="text" id="text" required
+                                   value={this.props.tasks.preview.inputs.text}
+                                   onChange={this.props.onPreviewInputChange} />
                         </FormGroup>
 
                         <FormGroup>
@@ -102,12 +82,12 @@ class AddTask extends Component {
                     </Form>
 
                     <FormGroup>
-                        <Button style={{ width: '100%' }} onClick={this.onPreviewClick}>Preview</Button>
+                        <Button style={{ width: '100%' }} onClick={this.props.togglePreviewVisibility}>Preview</Button>
                     </FormGroup>
 
-                    {this.state.preview.canShow && (
+                    {this.props.tasks.preview.canShow && (
                         <div className="preview">
-                            <Task el={this.state.preview} />
+                            <Task el={this.props.tasks.preview.inputs} />
                         </div>
                     )}
                 </Container>
@@ -117,5 +97,10 @@ class AddTask extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        tasks: { ...state.tasks.tasks }
+    }
+}
 
-export default connect(null, { addTask })(AddTask);
+export default connect(mapStateToProps, { addTask, togglePreviewVisibility, onPreviewInputChange })(AddTask);

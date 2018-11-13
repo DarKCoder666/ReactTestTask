@@ -28,7 +28,7 @@ class ListOfTasks extends Component {
 
 const mapStateToProps = state => {
     return {
-        tasks: { ...state.tasks },
+        tasks: { ...state.tasks.tasks },
         auth: { ...state.auth }
     }
 }

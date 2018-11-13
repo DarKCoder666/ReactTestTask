@@ -1,23 +1,19 @@
 import React, { Component } from 'react'
 import { Row, Col, Form, Label, Input, FormGroup, Button, } from 'reactstrap'
 
+import { connect } from 'react-redux'
+
 import history from '../history'
 import config from '../config'
+
+import { updateFilter } from '../actions/tasksAction'
 
 
 import qs from 'query-string'
 
-export default class Filter extends Component {
+class Filter extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            filter: {
-                filter: config.filter.default.sort,
-                direction: config.filter.default.direction,
-                page: 1
-            }
-        }
 
         this.filterSubmit = this.filterSubmit.bind(this);
     }
@@ -53,33 +49,27 @@ export default class Filter extends Component {
      */
     componentWillMount() {
         const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-        let newParams = {...params};
+        let newParams = { ...params };
 
-        if(!newParams.filter) {
+        if (!newParams.filter) {
             newParams.filter = config.filter.default.sort;
         }
-        if(!newParams.direction) {
+        if (!newParams.direction) {
             newParams.direction = config.filter.default.direction;
         }
-        if(!newParams.page) {
+        if (!newParams.page) {
             newParams.page = 1;
         }
 
         history.push({
             pathname: '/',
-            search: "?" + new URLSearchParams( newParams ).toString()
+            search: "?" + new URLSearchParams(newParams).toString()
         });
 
-        this.setState({
-            filter: {
-                ...this.state.filter,
-                ...newParams
-            }
-        });
-
+        this.props.updateFilter(newParams);
 
         this.props.loadTasks({
-            ...this.state.filter,
+            ...this.props.filter,
             ...newParams
         });
     }
@@ -100,7 +90,7 @@ export default class Filter extends Component {
                         <Col xs="12" sm="4">
                             <FormGroup>
                                 <Label for="filter">Filter by</Label>
-                                <Input type="select" defaultValue={this.state.filter.filter} name="filter" id="filter">
+                                <Input type="select" defaultValue={this.props.filter.filter} name="filter" id="filter">
                                     {sortElements}
                                 </Input>
                             </FormGroup>
@@ -108,7 +98,7 @@ export default class Filter extends Component {
                         <Col xs="12" sm="4">
                             <FormGroup>
                                 <Label for="direction">Order</Label>
-                                <Input type="select" defaultValue={this.state.filter.direction} name="direction" id="direction">
+                                <Input type="select" defaultValue={this.props.filter.direction} name="direction" id="direction">
                                     {directionElements}
                                 </Input>
                             </FormGroup>
@@ -126,3 +116,10 @@ export default class Filter extends Component {
 }
 
 
+const mapStateToProps = state => {
+    return {
+        filter: { ...state.tasks.tasks.filter }
+    }
+}
+
+export default connect(mapStateToProps, { updateFilter })(Filter);

@@ -1,6 +1,14 @@
-import { LOAD_LIST, UPDATE_TASK } from './types'
+import {
+    LOAD_LIST,
+    UPDATE_TASK,
+    TOGGLE_PREVIEW_VISIBILITY,
+    PREVIEW_INPUT_CHANGE,
+    UPDATE_FILTER
+} from './types'
 import axios from 'axios'
 import config from '../config'
+
+import { resizeImage } from '../scripts/imageManipulations'
 
 /**
  * Encoding functions
@@ -35,7 +43,6 @@ export const loadTasks = (params = { sort, direction, page: 0 }) => (dispatch) =
         },
     })
         .then((res) => {
-            console.log(res);
             if (res.data.status === "ok") {
                 dispatch({
                     type: LOAD_LIST,
@@ -77,7 +84,7 @@ export const editTask = (unorderedData, id) => (dispatch) => {
     let params = {
         developer: config.devName
     },
-    formData = new FormData();
+        formData = new FormData();
 
     // Order the data in object
     let orderedData = {};
@@ -113,7 +120,7 @@ export const editTask = (unorderedData, id) => (dispatch) => {
 
     // Preparing data to send to the server. 
     // Set each param into FormData.
-    for(let prop in orderedData) {
+    for (let prop in orderedData) {
         formData.append(prop, orderedData[prop]);
     }
 
@@ -132,4 +139,48 @@ export const editTask = (unorderedData, id) => (dispatch) => {
             });
             alert("Task edited!");
         });
+}
+
+/**
+ * Toggles the state of preview visibility
+ */
+export const togglePreviewVisibility = () => (dispatch) => {
+    dispatch({
+        type: TOGGLE_PREVIEW_VISIBILITY
+    })
+}
+
+/**
+ * Changes input values in state when input changes
+ * @param {Object} e 
+ */
+export const onPreviewInputChange = (e) => async (dispatch) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    if (name === 'file') {
+        const file = e.target.files[0];
+        name = "image_path";
+        value = file ? await resizeImage(e.target.files[0]) : "";
+    }
+
+    dispatch({
+        type: PREVIEW_INPUT_CHANGE,
+        payload: {
+            name,
+            value
+        }
+    })
+}
+
+
+/**
+ * 
+ * @param {Object} newParams set of new paramethers for updating params in the state
+ */
+export const updateFilter = (newParams) => (dispatch) => {
+    dispatch({
+        type: UPDATE_FILTER,
+        payload: newParams
+    })
 }
